@@ -1,2 +1,2 @@
-# Project-Three
-A chat app for users looking to meet new friends.
+# lex
+A chat app for young adults looking to meet new friends.
