@@ -21,7 +21,6 @@ export default class App extends React.Component {
         username: this.state.username
       })
     })
-      // .then(response => response.json())
       .then(response => {
         if (response.status === 200) {
           this.setState({ userCreated: true });
