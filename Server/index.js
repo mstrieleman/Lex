@@ -1,9 +1,10 @@
+require('dotenv/config');
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-MongoClient.connect('mongodb://localhost/library', (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   const app = express();
   const db = client.db('library');
   const users = db.collection('users');
@@ -15,6 +16,7 @@ MongoClient.connect('mongodb://localhost/library', (err, client) => {
         users.insertOne(req.body, (err, result) => {
           if (err) {
             console.error(err);
+            res.sendStatus(500);
           } else {
             res.sendStatus(200);
           }
@@ -25,8 +27,7 @@ MongoClient.connect('mongodb://localhost/library', (err, client) => {
     });
   });
 
-  const PORT = 3000;
-  app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}.`);
+  app.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}.`);
   });
 });
