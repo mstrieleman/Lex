@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-MongoClient.connect('mongodb://localhost/registration', (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   const db = client.db('library');
   const users = db.collection('users');
   const app = express();
