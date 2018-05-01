@@ -4,10 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
-  const app = express();
+MongoClient.connect('mongodb://localhost/registration', (err, client) => {
   const db = client.db('library');
   const users = db.collection('users');
+  const app = express();
 
   app.use(jsonParser);
   app.post('/login', (req, res) => {
@@ -27,7 +27,8 @@ MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
     });
   });
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Listening on port ${process.env.PORT}.`);
+  const PORT = process.env.PORT;
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}.`);
   });
 });
