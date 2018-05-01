@@ -10,7 +10,7 @@ export default class App extends React.Component {
     };
   }
   handleSubmit() {
-    let url = 'http://localhost:3000/login';
+    const url = 'http://localhost:3000/login';
     fetch(url, {
       method: 'POST',
       headers: {
