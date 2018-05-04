@@ -7,7 +7,31 @@ const app = express();
 const socketio = require('socket.io');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const onlineUsers = [];
+let onlineUsers = [];
+
+io.on('connection', socket => {
+  socket.on('disconnect', data => {
+    console.log('a user has lost connection...');
+  });
+
+  socket.on('submit-handle', data => {
+    onlineUsers.push(data);
+    socket.broadcast.emit('join-lobby', onlineUsers);
+    socket.emit('join-lobby', onlineUsers);
+    // console.log(data);
+  });
+
+  // socket.on('log-out', data => {
+  //   let userLoggedout = Object.values(data).join('');
+  //   console.log(userLoggedout);
+  //   console.log(onlineUsers);
+  //   onlineUsers = onlineUsers.filter(user => {
+  //     user !== data.handle;
+  //   });
+  //   console.log(data);
+  //   console.log(onlineUsers);
+  // });
+});
 
 MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   const db = client.db('library');
@@ -17,7 +41,6 @@ MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   app.post('/login', (req, res) => {
     users.findOne(req.body, (err, result) => {
       if (result == null) {
-        onlineUsers.push(req.body.username);
         users.insertOne(req.body, (err, result) => {
           if (err) {
             console.error(err);
@@ -29,17 +52,6 @@ MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
       } else {
         res.sendStatus(418);
       }
-    });
-  });
-
-  io.on('connection', socket => {
-    socket.join('lobby');
-    socket.emit('users', onlineUsers);
-    console.log('A client joined on', socket.id);
-
-    socket.on('disconnect', function() {
-      console.log(socket.id + ' has disconnected');
-      io.emit('user disconnected');
     });
   });
 

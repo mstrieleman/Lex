@@ -1,21 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Button,
-  ScrollView
-} from 'react-native';
-import SocketIOClient from 'socket.io-client/dist/socket.io';
-const socket = SocketIOClient('http://localhost:3000');
+import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import io from 'socket.io-client';
 const onlineUsers = [];
-const recentUserJoin = [];
-
-socket.on('users', data => {
-  onlineUsers.push(data.join(', '));
-});
 
 class Home extends React.Component {
   constructor(props) {
@@ -25,6 +12,7 @@ class Home extends React.Component {
       userCreated: null
     };
   }
+
   handleSubmit() {
     const url = 'http://localhost:3000/login';
     fetch(url, {
@@ -40,11 +28,11 @@ class Home extends React.Component {
       .then(response => {
         if (response.status === 200) {
           this.setState({ userCreated: true });
-          this.props.navigation.navigate('Lobby');
-          return response;
+          this.props.navigation.navigate('Lobby', {
+            username: this.state.username
+          });
         } else {
           this.setState({ userCreated: false });
-          return response;
         }
       })
       .catch(error => {
@@ -61,8 +49,6 @@ class Home extends React.Component {
       return <Text style={{ color: '#ff2500' }}>Failed to Create User!</Text>;
     }
   }
-
-  currentUserChange() {}
 
   render() {
     return (
@@ -90,22 +76,43 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUsers: onlineUsers
+      currentUsers: [],
+      loggedInAs: []
     };
+    this.socket = io.connect('http://localhost:3000');
+    this.socket.emit('submit-handle', {
+      handle: this.props.navigation.state.params.username
+    });
+    this.socket.on('join-lobby', onlineUsers => {
+      // this.setState({
+      //   loggedInAs: this.props.navigation.state.params.username
+      // });
+      this.setState({ currentUsers: onlineUsers });
+    });
   }
+
+  // handleSubmit() {
+  //   this.socket.emit('log-out', this.state.loggedInAs);
+  // }
+
   render() {
+    const $users = this.state.currentUsers;
+    const $usersRender = $users.map(e => {
+      return <Text>{e}</Text>;
+    });
     return (
       <View style={styles.container}>
-        <Text>Users online...</Text>
-        <ScrollView style={{ height: 400 }}>
-          {this.state.currentUsers.map(m => {
-            return (
-              <Text key={m} style={{ margin: 10 }}>
-                {m}
-              </Text>
-            );
-          })}
-        </ScrollView>
+        <Text>Logged in as: {this.state.loggedInAs}</Text>
+        <Text>Users online... {this.state.currentUsers.length}</Text>
+        <View>{$usersRender}</View>
+        <Text />
+        <Button
+          onPress={() => {
+            this.handleSubmit();
+          }}
+          title="LOG OUT"
+          color="#841584"
+        />
       </View>
     );
   }
