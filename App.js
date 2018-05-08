@@ -76,39 +76,43 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUsers: [],
-      loggedInAs: []
+      currentUsers: '',
+      loggedInAs: [],
+      userHandles: []
     };
     this.socket = io.connect('http://localhost:3000');
     this.socket.emit('submit-handle', {
       handle: this.props.navigation.state.params.username
     });
     this.socket.on('join-lobby', onlineUsers => {
-      // this.setState({
-      //   loggedInAs: this.props.navigation.state.params.username
-      // });
+      this.setState({
+        loggedInAs: this.props.navigation.state.params.username
+      });
       this.setState({ currentUsers: onlineUsers });
     });
+    console.log(this.state.currentUsers);
+    this.setState({ userHandles: this.state.currentUsers });
   }
 
-  // handleSubmit() {
-  //   this.socket.emit('log-out', this.state.loggedInAs);
-  // }
+  handleLogout() {
+    this.socket.emit('log-out', this.state.loggedInAs);
+    this.props.navigation.navigate('Home');
+  }
+
+  displayCurrentUsers() {
+    // TODO: display current users in a list
+    // console.log(this.state.currentUsers[0].handle);
+  }
 
   render() {
-    const $users = this.state.currentUsers;
-    const $usersRender = $users.map(e => {
-      return <Text>{e}</Text>;
-    });
+    this.displayCurrentUsers();
     return (
       <View style={styles.container}>
         <Text>Logged in as: {this.state.loggedInAs}</Text>
         <Text>Users online... {this.state.currentUsers.length}</Text>
-        <View>{$usersRender}</View>
-        <Text />
         <Button
           onPress={() => {
-            this.handleSubmit();
+            this.handleLogout();
           }}
           title="LOG OUT"
           color="#841584"

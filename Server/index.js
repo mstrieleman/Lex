@@ -9,6 +9,14 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 let onlineUsers = [];
 
+function logoutUser(value) {
+  for (let user of onlineUsers) {
+    if (onlineUsers.hasOwnProperty(user) && onlineUsers[user] === value) {
+      delete onlineUsers[user];
+    }
+  }
+}
+
 io.on('connection', socket => {
   socket.on('disconnect', data => {
     console.log('a user has lost connection...');
@@ -18,19 +26,23 @@ io.on('connection', socket => {
     onlineUsers.push(data);
     socket.broadcast.emit('join-lobby', onlineUsers);
     socket.emit('join-lobby', onlineUsers);
-    // console.log(data);
   });
 
-  // socket.on('log-out', data => {
-  //   let userLoggedout = Object.values(data).join('');
-  //   console.log(userLoggedout);
-  //   console.log(onlineUsers);
-  //   onlineUsers = onlineUsers.filter(user => {
-  //     user !== data.handle;
-  //   });
-  //   console.log(data);
-  //   console.log(onlineUsers);
-  // });
+  socket.on('log-out', data => {
+    if (
+      onlineUsers.find(user => {
+        return user.handle === data;
+      })
+    ) {
+      const found = onlineUsers.find(user => {
+        return user.handle === data;
+      });
+      const newOnlineUsers = onlineUsers.splice(found, 1);
+      onlineUsers = newOnlineUsers;
+      socket.broadcast.emit('join-lobby', onlineUsers);
+      socket.emit('join-lobby', onlineUsers);
+    }
+  });
 });
 
 MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
