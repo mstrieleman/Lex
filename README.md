@@ -1,2 +1,2 @@
 # lex
-A chat app for young adults looking to meet new friends.
+A chat app for people looking to meet new friends in their area.
