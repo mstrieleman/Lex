@@ -9,17 +9,11 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 let onlineUsers = [];
 
-function logoutUser(value) {
-  for (let user of onlineUsers) {
-    if (onlineUsers.hasOwnProperty(user) && onlineUsers[user] === value) {
-      delete onlineUsers[user];
-    }
-  }
-}
-
 io.on('connection', socket => {
   socket.on('disconnect', data => {
     console.log('a user has lost connection...');
+    socket.broadcast.emit('user-disconnect', onlineUsers);
+    socket.emit('user-disconnect', onlineUsers);
   });
 
   socket.on('submit-handle', data => {
@@ -29,6 +23,7 @@ io.on('connection', socket => {
   });
 
   socket.on('log-out', data => {
+    // TODO: Refine this as to not have two .find operations
     if (
       onlineUsers.find(user => {
         return user.handle === data;

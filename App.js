@@ -76,9 +76,9 @@ class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUsers: '',
+      currentUsers: [],
       loggedInAs: [],
-      userHandles: []
+      displayUsers: []
     };
     this.socket = io.connect('http://localhost:3000');
     this.socket.emit('submit-handle', {
@@ -90,8 +90,6 @@ class Lobby extends React.Component {
       });
       this.setState({ currentUsers: onlineUsers });
     });
-    console.log(this.state.currentUsers);
-    this.setState({ userHandles: this.state.currentUsers });
   }
 
   handleLogout() {
@@ -100,16 +98,22 @@ class Lobby extends React.Component {
   }
 
   displayCurrentUsers() {
-    // TODO: display current users in a list
-    // console.log(this.state.currentUsers[0].handle);
+    const store = this.state.currentUsers;
+    const result = store.map(user => {
+      let arr = user.handle;
+      return arr;
+    });
+    const joinResult = result.join(', ');
+    return joinResult;
   }
 
   render() {
-    this.displayCurrentUsers();
+    console.log(this.displayCurrentUsers());
     return (
       <View style={styles.container}>
         <Text>Logged in as: {this.state.loggedInAs}</Text>
         <Text>Users online... {this.state.currentUsers.length}</Text>
+        <Text>{this.displayCurrentUsers()}</Text>
         <Button
           onPress={() => {
             this.handleLogout();
