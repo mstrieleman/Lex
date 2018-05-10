@@ -1,13 +1,48 @@
-require('dotenv/config');
+require('dotenv').config({ path: '/Users/michael/LEX-CHAT/LEX/.env' });
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const app = express();
+const socketio = require('socket.io');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+let onlineUsers = [];
+
+io.on('connection', socket => {
+  socket.on('disconnect', data => {
+    console.log('a user has lost connection...');
+    socket.broadcast.emit('user-disconnect', onlineUsers);
+    socket.emit('user-disconnect', onlineUsers);
+  });
+
+  socket.on('submit-handle', data => {
+    onlineUsers.push(data);
+    socket.broadcast.emit('join-lobby', onlineUsers);
+    socket.emit('join-lobby', onlineUsers);
+  });
+
+  socket.on('log-out', data => {
+    // TODO: Refine this as to not have two .find operations
+    if (
+      onlineUsers.find(user => {
+        return user.handle === data;
+      })
+    ) {
+      const found = onlineUsers.find(user => {
+        return user.handle === data;
+      });
+      const newOnlineUsers = onlineUsers.splice(found, 1);
+      onlineUsers = newOnlineUsers;
+      socket.broadcast.emit('join-lobby', onlineUsers);
+      socket.emit('join-lobby', onlineUsers);
+    }
+  });
+});
 
 MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   const db = client.db('library');
   const users = db.collection('users');
-  const app = express();
 
   app.use(jsonParser);
   app.post('/login', (req, res) => {
@@ -28,7 +63,7 @@ MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   });
 
   const PORT = process.env.PORT;
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}.`);
   });
 });

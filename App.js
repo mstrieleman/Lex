@@ -1,7 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import io from 'socket.io-client';
+const onlineUsers = [];
 
-export default class App extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,6 +12,7 @@ export default class App extends React.Component {
       userCreated: null
     };
   }
+
   handleSubmit() {
     const url = 'http://localhost:3000/login';
     fetch(url, {
@@ -24,10 +28,11 @@ export default class App extends React.Component {
       .then(response => {
         if (response.status === 200) {
           this.setState({ userCreated: true });
-          return response;
+          this.props.navigation.navigate('Lobby', {
+            username: this.state.username
+          });
         } else {
           this.setState({ userCreated: false });
-          return response;
         }
       })
       .catch(error => {
@@ -56,12 +61,88 @@ export default class App extends React.Component {
           onChangeText={text => this.setState({ username: text })}
         />
         <Button
-          onPress={() => this.handleSubmit()}
+          onPress={() => {
+            this.handleSubmit();
+          }}
           title="LOGIN"
           color="#841584"
         />
       </View>
     );
+  }
+}
+
+class Lobby extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUsers: [],
+      loggedInAs: [],
+      displayUsers: []
+    };
+    this.socket = io.connect('http://localhost:3000');
+    this.socket.emit('submit-handle', {
+      handle: this.props.navigation.state.params.username
+    });
+    this.socket.on('join-lobby', onlineUsers => {
+      this.setState({
+        loggedInAs: this.props.navigation.state.params.username
+      });
+      this.setState({ currentUsers: onlineUsers });
+    });
+  }
+
+  handleLogout() {
+    this.socket.emit('log-out', this.state.loggedInAs);
+    this.props.navigation.navigate('Home');
+  }
+
+  displayCurrentUsers() {
+    const store = this.state.currentUsers;
+    const result = store.map(user => {
+      let arr = user.handle;
+      return arr;
+    });
+    const joinResult = result.join(', ');
+    return joinResult;
+  }
+
+  render() {
+    console.log(this.displayCurrentUsers());
+    return (
+      <View style={styles.container}>
+        <Text>Logged in as: {this.state.loggedInAs}</Text>
+        <Text>Users online... {this.state.currentUsers.length}</Text>
+        <Text>{this.displayCurrentUsers()}</Text>
+        <Button
+          onPress={() => {
+            this.handleLogout();
+          }}
+          title="LOG OUT"
+          color="#841584"
+        />
+      </View>
+    );
+  }
+}
+
+const RootStack = StackNavigator(
+  {
+    Home: {
+      screen: Home
+    },
+    Lobby: {
+      screen: Lobby
+    }
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+export default class App extends React.Component {
+  render() {
+    return <RootStack />;
   }
 }
 
