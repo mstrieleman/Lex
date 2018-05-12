@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '/Users/michael/LEX-CHAT/LEX/.env' });
+// require('dotenv').config({ path: 'C:\Users\Mike\eleven\lex\.env' });
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -23,15 +23,10 @@ io.on('connection', socket => {
   });
 
   socket.on('log-out', data => {
-    // TODO: Refine this as to not have two .find operations
-    if (
-      onlineUsers.find(user => {
-        return user.handle === data;
-      })
-    ) {
-      const found = onlineUsers.find(user => {
-        return user.handle === data;
-      });
+    const found = onlineUsers.find(user => {
+      return user.handle === data;
+    });
+    if (found) {
       const newOnlineUsers = onlineUsers.splice(found, 1);
       onlineUsers = newOnlineUsers;
       socket.broadcast.emit('join-lobby', onlineUsers);
@@ -40,7 +35,7 @@ io.on('connection', socket => {
   });
 });
 
-MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
+MongoClient.connect('mongodb://localhost/library', (err, client) => {
   const db = client.db('library');
   const users = db.collection('users');
 
@@ -62,7 +57,7 @@ MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
     });
   });
 
-  const PORT = process.env.PORT;
+  const PORT = 3000;
   server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}.`);
   });
