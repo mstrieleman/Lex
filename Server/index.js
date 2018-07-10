@@ -1,4 +1,4 @@
-// require('dotenv').config({ path: 'C:\Users\Mike\eleven\lex\.env' });
+require('dotenv').config()
 const { MongoClient } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -35,7 +35,7 @@ io.on('connection', socket => {
   });
 });
 
-MongoClient.connect('mongodb://localhost/library', (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
   const db = client.db('library');
   const users = db.collection('users');
 
@@ -57,8 +57,7 @@ MongoClient.connect('mongodb://localhost/library', (err, client) => {
     });
   });
 
-  const PORT = 3000;
-  server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}.`);
+  server.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}.`);
   });
 });
