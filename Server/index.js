@@ -8,6 +8,7 @@ const socketio = require('socket.io');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 let onlineUsers = [];
+let messages = []
 
 io.on('connection', socket => {
   socket.on('disconnect', data => {
@@ -20,6 +21,12 @@ io.on('connection', socket => {
     onlineUsers.push(data);
     socket.broadcast.emit('join-lobby', onlineUsers);
     socket.emit('join-lobby', onlineUsers);
+  });
+
+  socket.on('client-send-message', data => {
+    messages.push({key: data})
+    socket.emit('server-send-message', messages)
+    socket.broadcast.emit('server-send-message', messages)
   });
 
   socket.on('log-out', data => {

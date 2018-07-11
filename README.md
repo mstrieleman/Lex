@@ -13,4 +13,5 @@ A chat app for people looking to discover new friends in their area, attend loca
 - Chai
 
 ## Screen capture
-Coming soon!
+### Login
+![screencap](https://user-images.githubusercontent.com/14259747/42491230-dbd89994-83c8-11e8-9aba-925102f5eb24.gif)
