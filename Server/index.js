@@ -12,7 +12,6 @@ let messages = [];
 
 io.on("connection", socket => {
   socket.on("disconnect", data => {
-    console.log("a user has lost connection...");
     socket.broadcast.emit("user-disconnect", onlineUsers);
     socket.emit("user-disconnect", onlineUsers);
   });
