@@ -75,50 +75,49 @@ class Lobby extends React.Component {
             style={{ width: "100%", height: "100%" }}
           />
         </View>
-        <View style={styles.logoutButton}>
+                <View style={styles.menuArea}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setModalVisible(true);
+            }}
+          >
+            <Text style={styles.menuButton}>
+              USERS: {this.state.currentUsers.length}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.handleLogout();
             }}
           >
-            <Text style={{ color: "#841584", marginTop: "2%" }}>LOG OUT</Text>
+            <Text style={[styles.menuButton]}>LOG OUT</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.upperContainer}>
-          <Text
-            style={{ fontWeight: "bold", color: "white", marginBottom: "2%" }}
-          >
-            Users online: {this.state.currentUsers.length}
-          </Text>
-          <ScrollView>
-            <Text style={{ fontWeight: "bold", color: "white" }}>
-              {this.displayCurrentUsers()}
-            </Text>
-          </ScrollView>
+        <View style={styles.chatBoxArea}>
+          <FlatList
+            keyExtractor={(item, index) => `${index}`}
+            ref={ref => (this.flatList = ref)}
+            onContentSizeChange={() =>
+              this.flatList.scrollToEnd({ animated: true })
+            }
+            data={this.state.chatHistory}
+            renderItem={({ item, index }) => (
+              <View
+                style={{
+                  backgroundColor: colors[index % colors.length],
+                  borderRadius: 5,
+                  borderWidth: 2,
+                  margin: "1%"
+                }}
+              >
+                <Text style={styles.chatMessageArea}>{item.key}</Text>
+              </View>
+            )}
+          />
         </View>
-        <FlatList
-          keyExtractor={(item, index) => `${index}`}
-          ref={ref => (this.flatList = ref)}
-          onContentSizeChange={() =>
-            this.flatList.scrollToEnd({ animated: true })
-          }
-          data={this.state.chatHistory}
-          renderItem={({ item, index }) => (
-            <View
-              style={{
-                backgroundColor: colors[index % colors.length],
-                borderRadius: 4,
-                borderWidth: 1,
-                margin: "1%"
-              }}
-            >
-              <Text style={styles.chatBubble}>{item.key}</Text>
-            </View>
-          )}
-        />
-        <View>
+        <View style={styles.inputArea}>
           <TextInput
-            style={styles.chatInput}
+            style={styles.inputBar}
             autoCorrect={false}
             placeholder="Type your messages here..."
             clearButtonMode="always"
@@ -129,6 +128,8 @@ class Lobby extends React.Component {
             }
             value={this.state.sentChatText}
           />
+        </View>
+        <View style={styles.sendArea}>
           <TouchableOpacity
             style={styles.sendButton}
             onPress={() => {
@@ -138,8 +139,11 @@ class Lobby extends React.Component {
             <Text
               style={{
                 color: "#FFA500",
-                fontWeight: "bold",
-                marginBottom: "2%"
+                fontSize: 22,
+                fontWeight: "500",
+                textAlign: "center",
+                justifyContent: "center",
+                top: "7.5%"
               }}
             >
               SEND
@@ -151,85 +155,85 @@ class Lobby extends React.Component {
   }
 }
 
+let colors = ["rgba(132, 132,0,0.20)", "rgba(54, 21, 132, 0.20)"];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%"
-  },
-  image: {
-    flex: 1,
-    position: "absolute",
     width: "100%",
     height: "100%",
     alignItems: "center",
     justifyContent: "center"
   },
-  logoutButton: {
-    alignItems: "center",
+  background: {
+    height: "100%",
+    width: "100%",
+    position: "absolute"
+  },
+  menuArea: {
+    flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: "2%"
+  },
+  menuButton: {
+    flex: 1,
+    width: 175,
+    height: 70,
+    fontSize: 22,
+    fontWeight: "500",
+    textAlign: "center",
+    top: "18%",
+    alignSelf: "center",
+    color: "#841584",
     backgroundColor: "#FFA500",
-    borderColor: "#000",
-    width: 250,
-    height: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
+    borderRadius: 3,
     borderWidth: 1,
-    marginTop: "2%",
-    margin: 1
+    marginVertical: "3%",
+    marginHorizontal: "2%"
   },
-  sendButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#841584",
-    borderColor: "#000",
-    width: 250,
-    height: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
+  chatMessageArea: {
+    fontSize: 20,
+    minWidth: "100%",
+    color: "white"
+  },
+  chatBoxArea: {
+    flex: 9,
+    marginVertical: "1%",
+    width: "91%",
+    borderRadius: 5,
     borderWidth: 1,
-    marginLeft: "9%",
-    marginBottom: "2%",
-    margin: 1
+    borderColor: "rgba(255,255,255,0.10)"
   },
-  chatInput: {
-    width: 300,
-    margin: 10,
-    marginTop: "3%",
-    height: 45,
-    paddingHorizontal: 10,
+  inputArea: {
+    flex: 1,
+    width: "81%",
+    marginVertical: "2%",
+    marginTop: "1%"
+  },
+  inputBar: {
+    flex: 1,
+    fontSize: 20,
     borderRadius: 4,
     borderColor: "#ccc",
     borderWidth: 1,
-    fontSize: 20,
-    backgroundColor: "white"
-  },
-  upperContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    maxHeight: "15%",
-    marginTop: "2%",
-    width: "90%",
-    margin: 1
-  },
-  chatWindow: {
-    flex: 1,
     backgroundColor: "white",
-    height: "60%",
-    width: "90%",
-    marginTop: "5%"
+    marginTop: "2%"
   },
-  chatBubble: {
-    flex: 2,
-    justifyContent: "space-between",
-    minWidth: "90%",
-    maxWidth: "90%",
-    overflow: "scroll",
-    flexWrap: "wrap",
-    color: "white",
-    fontSize: 20
+  sendArea: {
+    flex: 1,
+    width: "81%",
+    justifyContent: "center"
+  },
+  sendButton: {
+    flex: 1,
+    height: 70,
+    width: "81%",
+    alignSelf: "center",
+    backgroundColor: "#841584",
+    borderRadius: 3,
+    borderWidth: 1,
+    marginBottom: "5%"
   }
 });
 
