@@ -5,13 +5,13 @@ A chat app for people looking to discover new friends in their area, attend loca
 
 ## Usage
 
-`
+```
 $ mongod
 $ npm install
 $ exp start
 $ exp iOS
 $ node index
-`
+```
 
 ## Languages and libraries to be used
 - React Native
