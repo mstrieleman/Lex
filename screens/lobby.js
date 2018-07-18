@@ -75,7 +75,7 @@ class Lobby extends React.Component {
             style={{ width: "100%", height: "100%" }}
           />
         </View>
-                <View style={styles.menuArea}>
+        <View style={styles.menuArea}>
           <TouchableOpacity
             onPress={() => {
               this.setModalVisible(true);
