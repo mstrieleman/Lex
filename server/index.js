@@ -8,18 +8,41 @@ const socketio = require("socket.io");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 let onlineUsers = [];
+let onlineFriends = [];
 let messages = [];
 
 io.on("connection", socket => {
   socket.on("disconnect", data => {
+    console.log("a user has lost connection...");
     socket.broadcast.emit("user-disconnect", onlineUsers);
     socket.emit("user-disconnect", onlineUsers);
+  });
+
+  socket.on("add-friend", user => {
+    let flag = false;
+    for (let i = 0; i < onlineUsers.length; i++) {
+      if (onlineUsers[i].handle === user) {
+        flag = true;
+      } else {
+        flag = false;
+      }
+    }
+    if (flag === true) {
+      socket.emit("friend-check-success", user);
+    } else {
+      socket.emit("user-not-found");
+    }
   });
 
   socket.on("submit-handle", data => {
     onlineUsers.push(data);
     socket.broadcast.emit("join-lobby", onlineUsers);
     socket.emit("join-lobby", onlineUsers);
+  });
+
+  socket.on("request-users", data => {
+    socket.emit("get-users", onlineUsers);
+    socket.broadcast.emit("update-friends");
   });
 
   socket.on("client-send-message", data => {
