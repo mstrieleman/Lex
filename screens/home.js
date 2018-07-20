@@ -7,7 +7,9 @@ import {
   Button,
   Image,
   ImageBackground,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight
 } from "react-native";
 import io from "socket.io-client";
 const onlineUsers = [];
@@ -19,6 +21,12 @@ class Home extends React.Component {
       username: "",
       userCreated: null
     };
+  }
+
+  setModalVisible(visible) {
+    this.setState({
+      ModalUndecided: visible
+    });
   }
 
   handleSubmit() {
@@ -69,10 +77,10 @@ class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.image}>
+        <View style={styles.background}>
           <ImageBackground
-            source={require("../assets/images/logo.png")}
-            style={{ width: "100%", height: "100%" }}
+            source={require("../assets/images/whiteLG.jpg")}
+            style={{ width: "100%", height: "100%", marginLeft: 7 }}
           />
         </View>
         <View style={styles.login}>
@@ -112,8 +120,9 @@ const styles = StyleSheet.create({
     margin: 1,
     marginBottom: "14%"
   },
-  image: {
+  background: {
     flex: 1,
+    backgroundColor: "#FCFCFB",
     position: "absolute",
     width: "100%",
     height: "100%",
