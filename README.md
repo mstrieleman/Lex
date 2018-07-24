@@ -36,4 +36,4 @@ $ exp iOS
 
 **Friends List**
 
-![friendslist](https://user-images.githubusercontent.com/14259747/43110548-82ca3586-8ea1-11e8-972e-1775c87431c5.gif)
+![fl](https://user-images.githubusercontent.com/14259747/43117958-641d72e2-8ec4-11e8-8eea-73b1fd8146b3.gif)
