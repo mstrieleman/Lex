@@ -28,12 +28,12 @@ $ exp iOS
 
 **Login**
 
-![login](https://user-images.githubusercontent.com/14259747/43108960-2f252592-8e99-11e8-98ab-f2cd20e16bc0.gif)
+![login](https://user-images.githubusercontent.com/14259747/43110570-9bf724e2-8ea1-11e8-8fc4-6dde7a7fee63.gif)
 
 **General Chat**
 
-![chat](https://user-images.githubusercontent.com/14259747/43109037-9775b792-8e99-11e8-95fa-1e7261d96024.gif)
+![chat](https://user-images.githubusercontent.com/14259747/43110561-9424521c-8ea1-11e8-9d7d-c5cb3bb16d00.gif)
 
 **Friends List**
 
-![friendslist](https://user-images.githubusercontent.com/14259747/43109392-7b3d3134-8e9b-11e8-8e63-ab5c5cf61660.gif)
+![friendslist](https://user-images.githubusercontent.com/14259747/43110548-82ca3586-8ea1-11e8-972e-1775c87431c5.gif)
