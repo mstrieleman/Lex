@@ -97,7 +97,7 @@ class Home extends React.Component {
               this.handleSubmit();
             }}
           >
-            <Text>Login</Text>
+            <Text style={{ fontSize: 20, color: "#FFA500" }}>LOGIN</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#841584",
     borderColor: "#000",
     width: 250,
-    height: 40,
+    minHeight: 40,
+    maxHeight: 40,
     paddingHorizontal: 10,
     borderRadius: 4,
     borderWidth: 1
@@ -144,7 +145,8 @@ const styles = StyleSheet.create({
     width: 250,
     margin: 20,
     marginBottom: 15,
-    height: 40,
+    minHeight: 40,
+    maxHeight: 40,
     paddingHorizontal: 10,
     borderRadius: 4,
     borderColor: "#ccc",

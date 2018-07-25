@@ -133,7 +133,7 @@ class Users extends React.Component {
             style={styles.input}
             returnKeyType="done"
             autoCorrect={false}
-            placeholder="Type a friends name here..."
+            placeholder="Add friend name here..."
             clearButtonMode="always"
             onChangeText={text =>
               this.setState({
@@ -150,13 +150,14 @@ class Users extends React.Component {
           >
             <Text
               style={{
-                fontSize: 22,
+                fontSize: 20,
                 textAlign: "center",
                 justifyContent: "center",
-                marginTop: "3%"
+                marginTop: "9%",
+                color: "#FFA500"
               }}
             >
-              Add
+              ADD
             </Text>
           </TouchableOpacity>
         </View>
@@ -187,9 +188,11 @@ const styles = StyleSheet.create({
     marginBottom: 2
   },
   input: {
+    fontSize: 16,
     borderRadius: 3,
     borderWidth: 1,
-    height: "50%",
+    minHeight: 40,
+    maxHeight: 40,
     width: "60%",
     backgroundColor: "white",
     paddingHorizontal: 10
@@ -197,7 +200,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#841584",
     margin: 3,
-    height: "50%",
+    minHeight: 40,
+    maxHeight: 40,
     borderRadius: 3,
     borderWidth: 1,
     width: "20%"

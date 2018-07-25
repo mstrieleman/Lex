@@ -8,14 +8,30 @@ const socketio = require("socket.io");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 let onlineUsers = [];
-let onlineFriends = [];
 let messages = [];
+let privateMessages = [];
 
 io.on("connection", socket => {
   socket.on("disconnect", data => {
     console.log("a user has lost connection...");
     socket.broadcast.emit("user-disconnect", onlineUsers);
     socket.emit("user-disconnect", onlineUsers);
+  });
+
+  socket.on("init-inbox", data => {
+    let room = JSON.stringify(data.handle);
+    socket.join(room);
+    socket.join("self");
+
+    socket.on("private-message", (recipient, contents) => {
+      console.log(recipient);
+      console.log(contents);
+      let handle = JSON.stringify(recipient);
+      let newMessage = room + ": " + contents;
+      privateMessages.push({ key: newMessage });
+      io.to("self").emit("message", privateMessages);
+      socket.to(handle).emit("message", privateMessages);
+    });
   });
 
   socket.on("add-friend", user => {
@@ -35,6 +51,8 @@ io.on("connection", socket => {
   });
 
   socket.on("submit-handle", data => {
+    socket.nickname = data.handle;
+    socket.join(data.handle);
     onlineUsers.push(data);
     socket.broadcast.emit("join-lobby", onlineUsers);
     socket.emit("join-lobby", onlineUsers);
