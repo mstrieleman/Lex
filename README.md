@@ -26,10 +26,6 @@ $ exp iOS
 
 ## Screen captures
 
-**Login**
-
-![login](https://user-images.githubusercontent.com/14259747/43110570-9bf724e2-8ea1-11e8-8fc4-6dde7a7fee63.gif)
-
 **General Chat**
 
 ![chat](https://user-images.githubusercontent.com/14259747/43110561-9424521c-8ea1-11e8-9d7d-c5cb3bb16d00.gif)
