@@ -37,3 +37,7 @@ $ exp iOS
 **Friends List**
 
 ![fl](https://user-images.githubusercontent.com/14259747/43117958-641d72e2-8ec4-11e8-8eea-73b1fd8146b3.gif)
+
+**Private Messaging**
+
+![ft5 private messages](https://user-images.githubusercontent.com/14259747/43184273-e505db32-8f9c-11e8-83c6-e902a07f354f.gif)
