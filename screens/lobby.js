@@ -45,6 +45,9 @@ class Lobby extends React.Component {
         chatHistory: messages
       });
     });
+    this.socket.emit("init-inbox", {
+      handle: this.state.loggedInAs
+    });
   }
 
   sendMessage(event) {
@@ -64,6 +67,12 @@ class Lobby extends React.Component {
 
   navigateUserList() {
     this.props.navigation.navigate("Users", {
+      loggedInAs: this.state.loggedInAs
+    });
+  }
+
+  navigateInbox() {
+    this.props.navigation.navigate("Inbox", {
       loggedInAs: this.state.loggedInAs
     });
   }
@@ -103,7 +112,11 @@ class Lobby extends React.Component {
           />
         </View>
         <View style={styles.menuArea}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.navigateInbox();
+            }}
+          >
             <Text style={styles.menuButton}>INBOX</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -172,7 +185,8 @@ class Lobby extends React.Component {
                 fontSize: 20,
                 textAlign: "center",
                 justifyContent: "center",
-                top: "6.5%"
+                marginTop: 6,
+                color: "#FFA500"
               }}
             >
               SEND
@@ -260,15 +274,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 110,
     fontSize: 20,
-    maxHeight: 35,
+    minHeight: 40,
+    maxHeight: 40,
     backgroundColor: "#FFA500",
     borderRadius: 3,
     borderWidth: 1,
-    marginTop: "2%",
+    marginTop: 10,
     marginHorizontal: "2%",
     textAlign: "center",
     marginLeft: 10,
-    paddingTop: 3
+    paddingTop: 6
   },
   menuArea: {
     flex: 1,
@@ -276,13 +291,13 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "row",
     marginVertical: "2%",
-    marginTop: "4%",
+    marginTop: "2%",
     justifyContent: "center"
   },
   chatMessageArea: {
     fontSize: 20,
     minWidth: "100%",
-    minHeight: "50%",
+    minHeight: "45%",
     margin: 3
   },
   chatBoxArea: {
@@ -293,36 +308,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)"
   },
-  inputArea: {
-    flex: 1,
-    width: "81%",
-    marginVertical: "2%",
-    marginTop: "1%",
-    marginLeft: 2
-  },
   inputBar: {
     flex: 1,
-    fontSize: 20,
-    width: "99%",
+    fontSize: 16,
+    minHeight: 40,
+    maxHeight: 40,
     paddingHorizontal: 10,
     borderRadius: 4,
-    borderColor: "#000",
-    borderWidth: 2,
+    minWidth: "60%",
+    borderColor: "#ccc",
+    borderWidth: 1,
     backgroundColor: "white",
-    marginTop: "2%",
-    marginRight: 3,
-    marginBottom: 2,
-    marginLeft: 2
+    marginBottom: "4%"
   },
   sendArea: {
     flex: 1,
-    width: "81%",
     justifyContent: "center"
   },
   sendButton: {
     flex: 1,
-    height: 70,
-    width: "80%",
+    minHeight: 40,
+    maxHeight: 40,
+    minWidth: "60%",
     alignSelf: "center",
     backgroundColor: "#841584",
     borderRadius: 3,
