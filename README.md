@@ -8,7 +8,7 @@ A chat app for people looking to discover new friends in their area, attend loca
 
 ```
 $ npm install
-npm install expo-cli --global
+$ npm install expo-cli --global
 $ mongod
 $ node index
 $ exp start
