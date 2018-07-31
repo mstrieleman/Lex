@@ -51,10 +51,13 @@ class Inbox extends React.Component {
       sentMessage: this.state.messageTypedText
     });
     let sentMessage = this.state.messageTypedText;
-    this.socket.emit("private-message", this.state.recipient, sentMessage);
+    this.socket.emit(
+      "private-message",
+      this.state.recipient,
+      this.state.loggedInAs,
+      sentMessage
+    );
   }
-
-  emitMessage() {}
 
   render() {
     let colors = ["rgba(188,188,188,0.9)", "rgba(91, 91, 91, 0.9)"];
