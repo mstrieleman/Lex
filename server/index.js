@@ -10,6 +10,7 @@ const io = require("socket.io")(server);
 let onlineUsers = [];
 let messages = [];
 let privateMessages = [];
+let blockedUsers = [];
 
 io.on("connection", socket => {
   socket.on("disconnect", data => {
@@ -23,14 +24,30 @@ io.on("connection", socket => {
     socket.join(room);
     socket.join("self");
 
-    socket.on("private-message", (recipient, contents) => {
+    socket.on("private-message", (recipient, sender, contents) => {
+      console.log(sender);
       console.log(recipient);
       console.log(contents);
-      let handle = JSON.stringify(recipient);
-      let newMessage = room + ": " + contents;
-      privateMessages.push({ key: newMessage });
-      io.to("self").emit("message", privateMessages);
-      socket.to(handle).emit("message", privateMessages);
+
+      if (blockedUsers.length > 0) {
+        for (var i = 0; i < blockedUsers.length; i++) {
+          if (blockedUsers[i] === sender) {
+            console.log("message blocked");
+          } else {
+            const handle = JSON.stringify(recipient);
+            const newMessage = room + ": " + contents;
+            privateMessages.push({ key: newMessage });
+            io.to("self").emit("message", privateMessages);
+            socket.to(handle).emit("message", privateMessages);
+          }
+        }
+      } else {
+        const handle = JSON.stringify(recipient);
+        const newMessage = room + ": " + contents;
+        privateMessages.push({ key: newMessage });
+        io.to("self").emit("message", privateMessages);
+        socket.to(handle).emit("message", privateMessages);
+      }
     });
   });
 
@@ -50,6 +67,17 @@ io.on("connection", socket => {
     }
   });
 
+  socket.on("block-user", user => {
+    if (user.length > 0) {
+      blockedUsers = blockedUsers.filter(emptyValue => emptyValue);
+      blockedUsers.push(user);
+      console.log(blockedUsers);
+      socket.emit("user-successfully-blocked", user);
+    } else {
+      console.log("omitted empty");
+    }
+  });
+
   socket.on("submit-handle", data => {
     socket.nickname = data.handle;
     socket.join(data.handle);
@@ -63,10 +91,23 @@ io.on("connection", socket => {
     socket.broadcast.emit("update-friends");
   });
 
-  socket.on("client-send-message", data => {
-    messages.push({ key: data });
-    socket.emit("server-send-message", messages);
-    socket.broadcast.emit("server-send-message", messages);
+  socket.on("client-send-message", (data, sender) => {
+    console.log(sender);
+    if (blockedUsers.length > 0) {
+      for (var i = 0; i < blockedUsers.length; i++) {
+        if (blockedUsers[i] === sender) {
+          console.log("blocked message");
+        } else {
+          messages.push({ key: data });
+          socket.emit("server-send-message", messages);
+          socket.broadcast.emit("server-send-message", messages);
+        }
+      }
+    } else {
+      messages.push({ key: data });
+      socket.emit("server-send-message", messages);
+      socket.broadcast.emit("server-send-message", messages);
+    }
   });
 
   socket.on("log-out", data => {

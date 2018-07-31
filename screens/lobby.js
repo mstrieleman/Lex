@@ -53,7 +53,8 @@ class Lobby extends React.Component {
   sendMessage(event) {
     this.socket.emit(
       "client-send-message",
-      `${this.state.loggedInAs}: ${this.state.sentChatText}`
+      `${this.state.loggedInAs}: ${this.state.sentChatText}`,
+      this.state.loggedInAs
     );
     this.setState({
       sentChatText: ""
