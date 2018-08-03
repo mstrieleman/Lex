@@ -38,3 +38,7 @@ $ exp iOS
 **Private Messaging**
 
 ![ft5 private messages](https://user-images.githubusercontent.com/14259747/43184273-e505db32-8f9c-11e8-83c6-e902a07f354f.gif)
+
+**Block Unwanted Users**
+
+![ft6 block users](https://user-images.githubusercontent.com/14259747/43464361-c97955a4-948f-11e8-8833-f2c5a8bbbf11.gif)
