@@ -12,6 +12,7 @@ import {
   TouchableHighlight
 } from "react-native";
 import io from "socket.io-client";
+import styles from "./styles.js";
 const onlineUsers = [];
 
 class Home extends React.Component {
@@ -83,77 +84,26 @@ class Home extends React.Component {
             style={{ width: "100%", height: "100%", marginLeft: 7 }}
           />
         </View>
-        <View style={styles.login}>
+        <View style={styles.loginStatusNotification}>
           {this.userCreationCheck()}
           <TextInput
-            style={styles.loginInput}
+            style={styles.textInput}
             placeholder="Enter a username..."
             returnKeyType="done"
             onChangeText={text => this.setState({ username: text })}
           />
           <TouchableOpacity
-            style={styles.loginButton}
             onPress={() => {
               this.handleSubmit();
             }}
+            style={styles.largePurpleButton}
           >
-            <Text style={{ fontSize: 20, color: "#FFA500" }}>LOGIN</Text>
+            <Text style={styles.orangeText}>LOGIN</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%"
-  },
-  login: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    width: 200,
-    margin: 1,
-    marginBottom: "14%"
-  },
-  background: {
-    flex: 1,
-    backgroundColor: "#FCFCFB",
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  loginButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#841584",
-    borderColor: "#000",
-    width: 250,
-    minHeight: 40,
-    maxHeight: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    borderWidth: 1
-  },
-  loginInput: {
-    width: 250,
-    margin: 20,
-    marginBottom: 15,
-    minHeight: 40,
-    maxHeight: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    fontSize: 16,
-    backgroundColor: "white"
-  }
-});
 
 export default Home;
