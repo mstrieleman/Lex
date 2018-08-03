@@ -13,6 +13,7 @@ import {
   Modal,
   TouchableHighlight
 } from "react-native";
+import styles from "./styles.js";
 import io from "socket.io-client";
 
 class Lobby extends React.Component {
@@ -112,29 +113,32 @@ class Lobby extends React.Component {
             style={{ width: "100%", height: "100%" }}
           />
         </View>
-        <View style={styles.menuArea}>
+        <View style={styles.smallSectionRow}>
           <TouchableOpacity
+            style={styles.menuButton}
             onPress={() => {
               this.navigateInbox();
             }}
           >
-            <Text style={styles.menuButton}>INBOX</Text>
+            <Text style={styles.blackText}>INBOX</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.menuButton}
             onPress={() => {
               this.navigateUserList();
             }}
           >
-            <Text style={styles.menuButton}>
+            <Text style={styles.blackText}>
               USERS: {this.state.currentUsers.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.menuButton}
             onPress={() => {
               this.handleLogout();
             }}
           >
-            <Text style={[styles.menuButton]}>LOG OUT</Text>
+            <Text style={styles.blackText}>LOG OUT</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.chatBoxArea}>
@@ -154,14 +158,14 @@ class Lobby extends React.Component {
                   margin: "1%"
                 }}
               >
-                <Text style={styles.chatMessageArea}>{item.key}</Text>
+                <Text style={styles.generatedChatMessages}>{item.key}</Text>
               </View>
             )}
           />
         </View>
         <View style={styles.inputArea}>
           <TextInput
-            style={styles.inputBar}
+            style={styles.textInput}
             returnKeyType="done"
             autoCorrect={false}
             placeholder="Type your messages here..."
@@ -174,169 +178,19 @@ class Lobby extends React.Component {
             value={this.state.sentChatText}
           />
         </View>
-        <View style={styles.sendArea}>
+        <View style={styles.smallSection}>
           <TouchableOpacity
-            style={styles.sendButton}
+            style={styles.largePurpleButton}
             onPress={() => {
               this.sendMessage();
             }}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                textAlign: "center",
-                justifyContent: "center",
-                marginTop: 6,
-                color: "#FFA500"
-              }}
-            >
-              SEND
-            </Text>
+            <Text style={styles.orangeText}>SEND</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  background: {
-    height: "100%",
-    width: "100%",
-    position: "absolute"
-  },
-  modal: {
-    fontSize: 21,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#FFA500",
-    marginBottom: "1%"
-  },
-  friends: {
-    color: "#FFA500",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#FFA500",
-    marginBottom: "1%"
-  },
-  usersMenu: {
-    flex: 1,
-    flexDirection: "row",
-    marginTop: 22,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  usersOnlineArea: {
-    flex: 4,
-    borderRadius: 4,
-    borderColor: "#fff",
-    borderWidth: 1
-  },
-  friendsOnlineTitle: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  friendsOnlineArea: {
-    flex: 4,
-    borderRadius: 4,
-    borderColor: "#fff",
-    borderWidth: 1
-  },
-  addFriendsArea: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: "10%"
-  },
-  closeButton: {
-    marginLeft: "5%",
-    marginTop: "0.2%",
-    backgroundColor: "#FFA500",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "20%",
-    borderRadius: 4,
-    borderColor: "#000",
-    borderWidth: 1,
-    maxHeight: "30%",
-    maxWidth: "10%"
-  },
-  menuButton: {
-    flex: 1,
-    width: 110,
-    fontSize: 20,
-    minHeight: 40,
-    maxHeight: 40,
-    backgroundColor: "#FFA500",
-    borderRadius: 3,
-    borderWidth: 1,
-    marginTop: 10,
-    marginHorizontal: "2%",
-    textAlign: "center",
-    marginLeft: 10,
-    paddingTop: 6
-  },
-  menuArea: {
-    flex: 1,
-    width: "81%",
-    height: "100%",
-    flexDirection: "row",
-    marginVertical: "2%",
-    marginTop: "2%",
-    justifyContent: "center"
-  },
-  chatMessageArea: {
-    fontSize: 20,
-    minWidth: "100%",
-    minHeight: "45%",
-    margin: 3
-  },
-  chatBoxArea: {
-    flex: 9,
-    marginVertical: "2%",
-    width: "91%",
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)"
-  },
-  inputBar: {
-    flex: 1,
-    fontSize: 16,
-    minHeight: 40,
-    maxHeight: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    minWidth: "60%",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    backgroundColor: "white",
-    marginBottom: "4%"
-  },
-  sendArea: {
-    flex: 1,
-    justifyContent: "center"
-  },
-  sendButton: {
-    flex: 1,
-    minHeight: 40,
-    maxHeight: 40,
-    minWidth: "60%",
-    alignSelf: "center",
-    backgroundColor: "#841584",
-    borderRadius: 3,
-    borderWidth: 1,
-    marginBottom: "5%"
-  }
-});
 
 export default Lobby;

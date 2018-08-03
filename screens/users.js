@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   FlatList
 } from "react-native";
+import styles from "./styles.js";
 import io from "socket.io-client";
 const friendsList = [];
 const blockList = [];
@@ -127,18 +128,20 @@ class Users extends React.Component {
             />
           </View>
           <View style={styles.modalContainer}>
-            <View style={styles.top}>
-              <Text style={styles.topText}>Users currently online</Text>
+            <View style={styles.smallSectionRow}>
+              <Text style={styles.notableBlackText}>
+                Users currently online
+              </Text>
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }}
-                style={styles.redButton}
+                style={styles.smallRedButton}
               >
-                <Text style={styles.topButtonText}>CLOSE</Text>
+                <Text style={styles.blockButtonText}>CLOSE</Text>
               </TouchableHighlight>
             </View>
-            <View style={styles.usersOnline}>
+            <View style={styles.listUsersArea}>
               <FlatList
                 keyExtractor={(item, index) => `${index}`}
                 ref={ref => (this.flatList = ref)}
@@ -161,11 +164,11 @@ class Users extends React.Component {
                 )}
               />
             </View>
-            <Text style={styles.textHeaders}>Blocked List</Text>
+            <Text style={styles.notableBlackText}>Blocked List</Text>
             <Text style={{ height: 20, marginBottom: 2 }}>
               {this.blockCheck()}
             </Text>
-            <View style={styles.friendsList}>
+            <View style={styles.listUsersArea}>
               <FlatList
                 keyExtractor={(item, index) => `${index}`}
                 ref={ref => (this.flatList = ref)}
@@ -188,12 +191,12 @@ class Users extends React.Component {
                 )}
               />
             </View>
-            <View style={styles.addFriend}>
+            <View style={styles.smallSectionRow}>
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
                 returnKeyType="done"
                 autoCorrect={false}
-                placeholder="Add friend name here..."
+                placeholder="Block username here..."
                 clearButtonMode="always"
                 onChangeText={text =>
                   this.setState({
@@ -203,38 +206,28 @@ class Users extends React.Component {
                 value={this.state.nameInput}
               />
               <TouchableOpacity
-                style={styles.button}
+                style={styles.smallPurpleButton}
                 onPress={() => {
                   this.blockUser();
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 20,
-                    textAlign: "center",
-                    justifyContent: "center",
-                    marginTop: "9%",
-                    color: "#FFA500"
-                  }}
-                >
-                  BLK
-                </Text>
+                <Text style={styles.orangeText}>BLK</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
-        <View style={styles.top}>
-          <Text style={styles.topText}>Users currently online</Text>
+        <View style={styles.smallSectionRow}>
+          <Text style={styles.notableBlackText}>Users currently online</Text>
           <TouchableHighlight
             onPress={() => {
               this.setModalVisible(true);
             }}
-            style={styles.redButton}
+            style={styles.smallRedButton}
           >
-            <Text style={styles.topButtonText}>BLOCK</Text>
+            <Text style={styles.blockButtonText}>BLOCK</Text>
           </TouchableHighlight>
         </View>
-        <View style={styles.usersOnline}>
+        <View style={styles.listUsersArea}>
           <FlatList
             keyExtractor={(item, index) => `${index}`}
             ref={ref => (this.flatList = ref)}
@@ -257,11 +250,9 @@ class Users extends React.Component {
             )}
           />
         </View>
-        <Text style={styles.textHeaders}>Friends List</Text>
-        <Text style={{ height: 20, marginBottom: 2 }}>
-          {this.creationCheck()}
-        </Text>
-        <View style={styles.friendsList}>
+        <Text style={styles.notableBlackText}>Friends List</Text>
+        <Text style={{ height: 20 }}>{this.creationCheck()}</Text>
+        <View style={styles.listUsersArea}>
           <FlatList
             keyExtractor={(item, index) => `${index}`}
             ref={ref => (this.flatList = ref)}
@@ -284,9 +275,9 @@ class Users extends React.Component {
             )}
           />
         </View>
-        <View style={styles.addFriend}>
+        <View style={styles.largeSection}>
           <TextInput
-            style={styles.input}
+            style={styles.textInput}
             returnKeyType="done"
             autoCorrect={false}
             placeholder="Add friend name here..."
@@ -299,135 +290,17 @@ class Users extends React.Component {
             value={this.state.nameInput}
           />
           <TouchableOpacity
-            style={styles.button}
+            style={styles.smallPurpleButton}
             onPress={() => {
               this.addFriend();
             }}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                textAlign: "center",
-                justifyContent: "center",
-                marginTop: "9%",
-                color: "#FFA500"
-              }}
-            >
-              ADD
-            </Text>
+            <Text style={styles.orangeText}>ADD</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "100%"
-  },
-  background: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  textHeaders: {
-    textAlign: "center",
-    marginTop: "2%",
-    fontSize: 20,
-    marginBottom: 1
-  },
-  input: {
-    fontSize: 16,
-    borderRadius: 3,
-    borderWidth: 1,
-    minHeight: 40,
-    maxHeight: 40,
-    width: "60%",
-    backgroundColor: "white",
-    paddingHorizontal: 10
-  },
-  button: {
-    backgroundColor: "#841584",
-    margin: 3,
-    marginTop: 1,
-    minHeight: 40,
-    maxHeight: 40,
-    borderRadius: 3,
-    borderWidth: 1,
-    width: "20%"
-  },
-  redButton: {
-    backgroundColor: "red",
-    margin: 3,
-    minHeight: 40,
-    maxHeight: 40,
-    borderRadius: 3,
-    borderWidth: 1,
-    width: "20%",
-    marginRight: 10,
-    marginTop: "3.4%"
-  },
-  top: {
-    marginTop: "2%",
-    marginRight: "4%",
-    flex: 1,
-    flexDirection: "row"
-  },
-  topText: {
-    flexDirection: "row",
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 20,
-    fontSize: 20
-  },
-  topButtonText: {
-    flexDirection: "row",
-    marginLeft: 8,
-    marginRight: 5,
-    fontSize: 20,
-    marginTop: "7%",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  usersOnline: {
-    flex: 4,
-    width: "90%",
-    borderRadius: 3,
-    borderWidth: 1,
-    margin: "1%",
-    marginTop: "2%"
-  },
-  friendsList: {
-    flex: 4,
-    width: "90%",
-    maxHeight: "90%",
-    borderRadius: 3,
-    borderWidth: 1,
-    margin: "1%",
-    marginBottom: 1
-  },
-  addFriend: {
-    flex: 1,
-    width: "90%",
-    height: "55%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 1
-  },
-  modalContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "100%",
-    marginTop: 22
-  }
-});
 
 export default Users;
